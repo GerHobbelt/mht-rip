@@ -135,7 +135,7 @@ struct page *new_page()
   return new_page;
 }
 
-int line_to_page( char *line, struct page *current, int line_length )
+void line_to_page( char *line, struct page *current, int line_length )
 {
   if( (current->location + line_length) > current->size )
     {
@@ -147,7 +147,7 @@ int line_to_page( char *line, struct page *current, int line_length )
   current->location += line_length;
 }
 
-int page_to_file( struct page *current, int o_count )
+void page_to_file( struct page *current, int o_count )
 {
   FILE *o_file;
   char *filename = malloc( 15 * sizeof( char ) );
@@ -408,7 +408,12 @@ struct page* buffer_to_pages( char *in_buffer, size_t buffer_size )
 }
 
 
-int main( int argc, char *argv[] )
+
+#if defined(BUILD_MONOLITHIC)
+#define main      mhtml_rip_main
+#endif
+
+int main( int argc, const char **argv )
 {
   FILE *input;
   char *in_buffer;
